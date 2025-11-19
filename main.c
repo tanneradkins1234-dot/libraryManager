@@ -4,49 +4,33 @@
 #include <cjson/cJSON.h>
 
 int addBooks() {
+ 	FILE *fp = fopen("books.csv", "a+");
+	
 	char author [50];
 	char bookName[100];
+		
+	if (!fp) {
+		printf("Cant open File\n");
+		return 1;
+	}
 	
-	cJSON *json = cJSON_CreateObject();
 	getchar();
-	printf("Input The Author: \n");
+	printf("Input The Author: ");
 	fgets(author, 50, stdin);
 	author[strcspn(author, "\n")] = 0;
 	printf("Author Entered: %s\n", author);
-	printf("|--------------------------|\n");
-	printf("Adding String To JSON object...\n");	
-	cJSON_AddStringToObject(json, "author", author);
-	printf("String Added\n");
 	printf("|---------------------------|\n");
 
 	printf("Input The Book Name: ");
 	fgets(bookName, 100, stdin);
 	bookName[strcspn(bookName, "\n")] = 0;
-	printf("Book Name Entered: %s\n", bookName);
-	printf("|--------------------------|\n");
- 	printf("Adding String To JSON object...\n");
-	cJSON_AddStringToObject(json, "bookName", bookName);
-	printf("String Added\n");
-	printf("|--------------------------|\n");
-	printf("Converting JSON object to a JSON string...\n");
-	char *json_str = cJSON_Print(json);
-	printf("Conversion Complete\n");
-	printf("|--------------------------|\n");
-	printf("Writing JSON string to file: books.json...\n");
-	FILE *fp = fopen("books.json", "a+");
-	if (fp == NULL) {
-		printf("Error: Unable to open the file.\n");
-		return 1;
-	}
-	fseek(fp, 0, SEEK_END);
-	printf("%s\n", json_str);
-	fputs(json_str, fp);
-	fclose;
-	printf("JSON String Succesully Written\n");
-	cJSON_free(json_str);
-	cJSON_Delete(json);
-	printf("Book Added Successfully \n");
-
+  	printf("Book Name Entered: %s\n", bookName);
+	printf("|---------------------------|\n");
+	printf("Adding data to books.csv...\n");
+	fprintf(fp, "%s, %s\n", author, bookName);
+	printf("|---------------------------|\n");
+	printf("Information Added Successfully\n");
+	fclose(fp);	
 	return 0;
 }
 
@@ -61,20 +45,23 @@ int viewBooks() {
 }
 
 int addMembers() {
+	
+	FILE *fp = fopen("members.csv", "a+");
+	
 	char name[50];
 	char email[100];
 	char phoneNumber[50];
 
-	cJSON *json = cJSON_CreateObject();
+	if (!fp) {
+		printf("Cant Open File\n");
+		return 1;
+	}
+
 	getchar();
 	printf("Input Member Name: ");
 	fgets(name, 50, stdin);
 	name[strcspn(name, "\n")] = 0;
 	printf("Name Entered: %s\n", name);
-	printf("|--------------------------|\n");
-	printf("Adding String To JSON Object...\n");
-	cJSON_AddStringToObject(json, "name", name);
-	printf("String Added\n");
 	printf("|--------------------------|\n");
 	
 	printf("Input Member Email: ");
@@ -82,39 +69,17 @@ int addMembers() {
 	email[strcspn(email, "\n")] = 0;
 	printf("Email Entered: %s\n", email);
 	printf("|--------------------------|\n");
-	printf("Adding String To JSON Object...\n");
-	cJSON_AddStringToObject(json, "email", email);
-	printf("String Added\n");
-	printf("|--------------------------|\n");
 
 	printf("Input Member Phone Number: ");
 	fgets(phoneNumber, 50, stdin);
 	phoneNumber[strcspn(phoneNumber, "\n")] = 0;
-	printf("Phone Number Entered: \n");
+	printf("Phone Number Entered: %s\n", phoneNumber);
 	printf("|--------------------------|\n");
-	printf("Adding String To JSON Object...");
-	cJSON_AddStringToObject(json, "phoneNumber", phoneNumber);
-	printf("String Added\n");
+	printf("Adding Data To members.csv...\n");
+	fprintf(fp, "%s, %s, %s\n", name, email, phoneNumber);	
 	printf("|--------------------------|\n");
-
-	printf("Converting JSON object to a JSON string...\n");
-	char *json_str = cJSON_Print(json);
-	printf("Conversion Complete\n");
-	printf("|--------------------------|\n");
-	printf("Writing JSON string to file: members.json...\n");
-	FILE *fp = fopen("members.json", "a+");
-	if (fp == NULL) {
-		printf("Error: Unable to open the file.\n");
-		return 1;
-	}
-	fseek(fp, 0, SEEK_END);
-	printf("%s\n", json_str);
-	fputs(json_str, fp);
-	fclose;
-	printf("JSON String Succesully Written\n");
-	cJSON_free(json_str);
-	cJSON_Delete(json);
 	printf("Member Added Successfully \n");
+	fclose(fp);
 
 	return 0;
 }
